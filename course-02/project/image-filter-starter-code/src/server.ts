@@ -38,9 +38,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   } );
   
   app.get('/filteredimage/', async ( req, res ) => {
-    console.log("Request" + req);
+
     let { image_url } = req.query;
+
     console.log(`Image URL is ${image_url}`);
+
     if ( !image_url) {
       return res.status(400)
                 .send(`Please provide image URL`);
@@ -51,16 +53,13 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       console.log("Filtered path: " +  filtered_img);
       res.sendFile(filtered_img,  (err) => {
         if(err) {
-          console.log(`Error Sending File`);
+          console.log(`Error Sending File: ${err}`);
         }
         else {
-           console.log("Erase local file")
+           console.log("Erase local file");
            deleteLocalFiles([filtered_img]);
         }
       });
-      
-
-
     } 
     catch(err){ 
         console.log(err);
@@ -69,35 +68,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
               .send(err);
 
     }
-
-    // const items = await FeedItem.findAndCountAll({where: {id: id}, order: [['id', 'DESC']]});
-    // items.rows.map((item) => {
-    //         if(item.url) {
-    //             item.url = AWS.getGetSignedUrl(item.url);
-    //         }
-    // });
-
-    // if(items.count == 0) {
-    //       return res.status(400)
-    //             .send(`Nnot found`);
-    // }
-    // return res.send(items);
-
-
-    // let cars_filtered:Car[] = cars.filter( record => record.id==car_id);
-
-    // if(cars_filtered.length == 0) {
-    //   return res.status(400)
-    //             .send(`car not found`);
-    // }
-
-    // return res.status(200)
-    //           .send('boobs:');
   });
-
-
-
-
 
   // Start the Server
   app.listen( port, () => {
